@@ -3,6 +3,7 @@
   "image": "mcr.microsoft.com/devcontainers/universal",
   "features": {},
   "containerEnv": {
+    "ENABLE_RCLONE": "${localEnv:ENABLE_RCLONE}",
     "RCLONE_CONF": "${localEnv:RCLONE_CONF}",
     "MOUNT_SOURCE": "${localEnv:MOUNT_SOURCE}",
     "MOUNT_TARGET": "${localEnv:MOUNT_TARGET}"
@@ -10,12 +11,12 @@
   "initializeCommand": {},
   "updateContentCommand": {},
   "postCreateCommand": {
-    "install-rclone": "curl https://rclone.org/install.sh | sudo bash",
-    "configure-rclone": "mkdir -p ~/.config/rclone && if [ ! -z \"$RCLONE_CONF\" ]; then echo \"$RCLONE_CONF\" > ~/.config/rclone/rclone.conf && chmod 600 ~/.config/rclone/rclone.conf; fi",
-    "install-fuse": "sudo apt-get update && sudo apt-get install -y fuse3",
-    "create-mount-dir": "mkdir -p ${MOUNT_TARGET:-~/codespaces}"
+    "install-rclone": "if [ \"$ENABLE_RCLONE\" = \"true\" ]; then curl https://rclone.org/install.sh | sudo bash; fi",
+    "configure-rclone": "if [ \"$ENABLE_RCLONE\" = \"true\" ]; then mkdir -p ~/.config/rclone && if [ ! -z \"$RCLONE_CONF\" ]; then echo \"$RCLONE_CONF\" > ~/.config/rclone/rclone.conf && chmod 600 ~/.config/rclone/rclone.conf; fi; fi",
+    "install-fuse": "if [ \"$ENABLE_RCLONE\" = \"true\" ]; then sudo apt-get update && sudo apt-get install -y fuse3; fi",
+    "create-mount-dir": "if [ \"$ENABLE_RCLONE\" = \"true\" ]; then mkdir -p ${MOUNT_TARGET:-~/codespaces}; fi"
   },
-  "postStartCommand": "rclone mount ${MOUNT_SOURCE} ${MOUNT_TARGET:-~/codespaces} --daemon --allow-non-empty --vfs-cache-mode writes --vfs-cache-max-size 4G --transfers 8 --buffer-size 128M",
+  "postStartCommand": "if [ \"$ENABLE_RCLONE\" = \"true\" ]; then rclone mount ${MOUNT_SOURCE} ${MOUNT_TARGET:-~/codespaces} --daemon --allow-non-empty --vfs-cache-mode writes --vfs-cache-max-size 4G --transfers 8 --buffer-size 128M; fi",
   "customizations": {
     "vscode": {
       "extensions": [
