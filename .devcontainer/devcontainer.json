@@ -6,7 +6,8 @@
     "ENABLE_RCLONE": "${localEnv:ENABLE_RCLONE}",
     "RCLONE_CONF": "${localEnv:RCLONE_CONF}",
     "MOUNT_SOURCE": "${localEnv:MOUNT_SOURCE}",
-    "MOUNT_TARGET": "${localEnv:MOUNT_TARGET}"
+    "MOUNT_TARGET": "${localEnv:MOUNT_TARGET}",
+    "GEMINI_API_KEY": "${localEnv:GEMINI_API_KEY}"
   },
   "initializeCommand": {},
   "updateContentCommand": {},
@@ -14,7 +15,8 @@
     "install-rclone": "if [ \"$ENABLE_RCLONE\" = \"true\" ]; then curl https://rclone.org/install.sh | sudo bash; fi",
     "configure-rclone": "if [ \"$ENABLE_RCLONE\" = \"true\" ]; then mkdir -p ~/.config/rclone && if [ ! -z \"$RCLONE_CONF\" ]; then echo \"$RCLONE_CONF\" > ~/.config/rclone/rclone.conf && chmod 600 ~/.config/rclone/rclone.conf; fi; fi",
     "install-fuse": "if [ \"$ENABLE_RCLONE\" = \"true\" ]; then sudo apt-get update && sudo apt-get install -y fuse3; fi",
-    "create-mount-dir": "if [ \"$ENABLE_RCLONE\" = \"true\" ]; then mkdir -p ${MOUNT_TARGET:-~/codespaces}; fi"
+    "create-mount-dir": "if [ \"$ENABLE_RCLONE\" = \"true\" ]; then mkdir -p ${MOUNT_TARGET:-~/codespaces}; fi",
+    "install-gemini-cli": "npm install -g @google/gemini-cli"
   },
   "postStartCommand": "if [ \"$ENABLE_RCLONE\" = \"true\" ]; then rclone mount ${MOUNT_SOURCE} ${MOUNT_TARGET:-~/codespaces} --daemon --allow-non-empty --vfs-cache-mode writes --vfs-cache-max-size 4G --transfers 8 --buffer-size 128M; fi",
   "customizations": {
