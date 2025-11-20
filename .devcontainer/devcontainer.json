@@ -16,8 +16,7 @@
     "configure-rclone": "if [ \"$ENABLE_RCLONE\" = \"true\" ]; then mkdir -p ~/.config/rclone && if [ ! -z \"$RCLONE_CONF\" ]; then echo \"$RCLONE_CONF\" > ~/.config/rclone/rclone.conf && chmod 600 ~/.config/rclone/rclone.conf; fi; fi",
     "install-fuse": "if [ \"$ENABLE_RCLONE\" = \"true\" ]; then sudo apt-get update && sudo apt-get install -y fuse3; fi",
     "create-mount-dir": "if [ \"$ENABLE_RCLONE\" = \"true\" ]; then mkdir -p ${MOUNT_TARGET:-~/codespaces}; fi",
-    "install-gemini-cli": "npm install -g @google/gemini-cli",
-    "install-acli": "sudo apt-get install -y wget gnupg2 && sudo mkdir -p -m 755 /etc/apt/keyrings && wget -nv -O- https://acli.atlassian.com/gpg/public-key.asc | sudo gpg --dearmor -o /etc/apt/keyrings/acli-archive-keyring.gpg && sudo chmod go+r /etc/apt/keyrings/acli-archive-keyring.gpg && echo \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/acli-archive-keyring.gpg] https://acli.atlassian.com/linux/deb stable main\" | sudo tee /etc/apt/sources.list.d/acli.list > /dev/null && sudo apt update && sudo apt install -y acli"
+    "install-gemini-cli": "npm install -g @google/gemini-cli"
   },
   "postStartCommand": "if [ \"$ENABLE_RCLONE\" = \"true\" ]; then rclone mount ${MOUNT_SOURCE} ${MOUNT_TARGET:-~/codespaces} --daemon --allow-non-empty --vfs-cache-mode writes --vfs-cache-max-size 4G --transfers 8 --buffer-size 128M; fi",
   "customizations": {
