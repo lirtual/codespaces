@@ -23,7 +23,6 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "augment.vscode-augment",
         "ms-azuretools.vscode-docker",
         "ms-vscode-remote.remote-containers",
         "cweijan.vscode-database-client2",
